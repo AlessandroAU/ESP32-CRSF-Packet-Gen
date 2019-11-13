@@ -33,14 +33,16 @@ void StartTimer() {
 void setup() {
   // put your setup code here, to run once:
   crsf.Begin();
-  delay(200);
+
+  pinMode(0, INPUT_PULLUP);
 
   crsf.PackedRCdataOut.ch0 = CRSF_CHANNEL_VALUE_MIN;
   crsf.PackedRCdataOut.ch1 = CRSF_CHANNEL_VALUE_MIN;
   crsf.PackedRCdataOut.ch2 = CRSF_CHANNEL_VALUE_MIN;
   crsf.PackedRCdataOut.ch3 = CRSF_CHANNEL_VALUE_MIN;
-  crsf.PackedRCdataOut.ch4 = CRSF_CHANNEL_VALUE_MAX;
+  crsf.PackedRCdataOut.ch4 = CRSF_CHANNEL_VALUE_MIN;
   crsf.sendRCFrameToFC();
+
   StartTimer();
 }
 
@@ -48,9 +50,14 @@ void loop() {
   // put your main code here, to run repeatedly:
   delay(1);
 
+  if (digitalRead(0)) {
+    crsf.PackedRCdataOut.ch4 = CRSF_CHANNEL_VALUE_MIN;
+  } else {
+    crsf.PackedRCdataOut.ch4 = CRSF_CHANNEL_VALUE_MAX;
+  }
   crsf.PackedRCdataOut.ch0 = random(CRSF_CHANNEL_VALUE_MIN, CRSF_CHANNEL_VALUE_MAX);
   crsf.PackedRCdataOut.ch1 = random(CRSF_CHANNEL_VALUE_MIN, CRSF_CHANNEL_VALUE_MAX);
-  crsf.PackedRCdataOut.ch2 = random(CRSF_CHANNEL_VALUE_MIN, CRSF_CHANNEL_VALUE_MAX);
+  crsf.PackedRCdataOut.ch2 = CRSF_CHANNEL_VALUE_MIN;
   crsf.PackedRCdataOut.ch3 = random(CRSF_CHANNEL_VALUE_MIN, CRSF_CHANNEL_VALUE_MAX);
 
 }
